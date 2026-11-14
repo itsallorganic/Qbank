@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09111f">
+  <meta name="description" content="Interactive Step 1 practice questions in cardiology, nephrology, and pulmonology.">
+  <title>Step 1 Practice | Interactive Question Bank</title>
+  <style>
+  :root {
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #edf3fc; background: #070d18; color-scheme: dark;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; line-height:1.6; min-height:100vh; position:relative; isolation:isolate; background:#eaf0f8; }
+  body::before, body::after { content:""; position:fixed; z-index:-2; pointer-events:none; inset:-27%; }
+  body::before {
+    background:radial-gradient(ellipse at 18% 30%, #c6e5f0 0%, transparent 31%),
+               radial-gradient(ellipse at 76% 26%, #c9cffb 0%, transparent 30%),
+               radial-gradient(ellipse at 70% 78%, #c5f0df 0%, transparent 37%),
+               linear-gradient(140deg,#edf3fb,#edf1fd 55%,#e7f6ee);
+    animation:auroraDrift 23s ease-in-out infinite alternate;
+  }
+  body::after { z-index:-1; background-image:radial-gradient(#6489b9 0.75px,transparent 0.9px); background-size:32px 32px; opacity:.09; animation:particleShift 42s linear infinite; }
+  body.motion-off::before, body.motion-off::after { animation:none !important; }
+  @keyframes auroraDrift { 0% { transform:translate3d(-2.5%,0,0) rotate(-4deg) scale(1.02); } 50% { transform:translate3d(2%,-2%,0) rotate(3deg) scale(1.07); } 100% {transform:translate3d(-1%,3%,0) rotate(-2deg) scale(1.025);} }
+  @keyframes particleShift { to { transform:translate(48px,48px); } }
+  button,select,input { font:inherit; }
+  button {cursor:pointer;} button:disabled {cursor:default;}
+  [hidden] {display:none !important;}
+  :focus-visible {outline:3px solid #377fc2; outline-offset:3px;}
+  .layout {max-width:1200px;padding:0 22px;margin:0 auto;}
+  .site-header {background:linear-gradient(110deg,#14253d 0%,#173751 64%,#20576b 100%);color:white;padding:23px 0 25px;box-shadow:0 8px 35px #14263e16;}
+  .header-inner {display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .identity {display:flex;align-items:center;gap:13px;}
+  .mark {display:grid;place-items:center;width:48px;height:48px;border:1px solid #84a6c4;color:#b4f2e3;border-radius:14px;font-size:21px;font-weight:800;background:#ffffff12;}
+  h1 {font-size:clamp(21px,3vw,29px);margin:0;line-height:1.2;letter-spacing:-.03em;}
+  .subhead {color:#bfd3e4;font-size:13px;margin-top:5px;}
+  .header-count {color:#dcefe9;font-size:13px;border:1px solid #ffffff38;background:#ffffff0f;padding:7px 13px;border-radius:999px;}
+  .header-actions {display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .theme-toggle {background:#ffffff13;color:#f2f7ff;border:1px solid #ffffff50;padding:9px 14px;border-radius:10px;font-size:12px;font-weight:750;white-space:nowrap;}
+  .theme-toggle:hover {background:#ffffff26;}
+
+  .app {display:grid;grid-template-columns:300px minmax(0,1fr);gap:22px;margin-top:26px;margin-bottom:55px;align-items:start;}
+  .panel {background:rgba(255,255,255,.92);border:1px solid rgba(224,233,243,.94);border-radius:17px;box-shadow:0 11px 38px #20375217;}
+  .sidebar {padding:22px;position:sticky;top:16px;z-index:10;}
+  .sidebar h2 {font-size:16px;margin:0 0 14px;letter-spacing:-.01em;}
+  .aside-heading {display:flex;align-items:center;justify-content:space-between;gap:9px;}
+  .aside-heading .sparkle {color:#248a7e;font-size:17px;}
+  .sidebar .field {margin:15px 0;}
+  .label {display:block;color:#52667e;font-weight:700;font-size:12px;margin-bottom:6px;}
+  select {width:100%;padding:10px 30px 10px 10px;color:#192f49;background:white;border:1px solid #cbd9e7;border-radius:9px;}
+  .progress-info {display:flex;justify-content:space-between;align-items:center;margin:7px 0 8px;font-size:13px;}
+  .progress-track {height:9px;background:#e5edf4;border-radius:99px;overflow:hidden;}
+  .progress-fill {height:100%;width:0%;background:linear-gradient(90deg,#31baa7,#198678);border-radius:99px;transition:width .24s ease;}
+  .stats {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:16px;}
+  .stat {padding:12px 5px;background:#f5f8fc;border:1px solid #e9eff5;border-radius:10px;text-align:center;}
+  .stat strong {display:block;font-size:19px;color:#142f4b;line-height:1.3;white-space:nowrap;}
+  .stat span {font-size:11px;color:#667b90;}
+  .side-divider {border:0;border-top:1px solid #e6edf4;margin:20px 0 16px;}
+  .section-title {font-size:13px;font-weight:800;color:#344e69;letter-spacing:.005em;margin:0 0 10px;}
+  .systems {display:grid;gap:8px;}
+  .system-card {border:1px solid #e2eaf2;border-radius:11px;background:#fbfcfe;padding:10px 11px;}
+  .system-top {display:flex;justify-content:space-between;align-items:baseline;gap:4px;}
+  .system-name {font-weight:750;font-size:12px;color:#25435f;}
+  .system-accuracy {font-weight:800;color:#156e65;font-size:12px;}
+  .system-meta {font-size:11px;color:#657a90;display:flex;justify-content:space-between;margin:3px 0 7px;}
+  .system-track {height:5px;border-radius:20px;background:#e9eff4;overflow:hidden;}
+  .system-fill {height:100%;background:#75b7c2;border-radius:20px;transition:width .24s ease;}
+  .system-card[data-system="Cardiology"] .system-fill {background:#668acb;}
+  .system-card[data-system="Nephrology"] .system-fill {background:#48aa9f;}
+  .system-card[data-system="Pulmonology"] .system-fill {background:#ac92d8;}
+  .jump-wrap {position:relative;}
+  .jump-toggle {display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;padding:10px 12px;background:white;color:#203851;border:1px solid #ccd9e6;border-radius:9px;text-align:left;font-size:13px;}
+  .jump-toggle:hover,.jump-toggle[aria-expanded="true"] {border-color:#3d88b6;}
+  .jump-popover {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;width:min(525px,calc(100vw - 26px));max-height:calc(100vh - 30px);padding:17px;background:#fff;border:1px solid #d8e2eb;border-radius:16px;box-shadow:0 25px 80px #13283d88;}
+  .jump-popover-top {display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;}
+  .jump-popover-top strong {font-size:13px;color:#263e58;}
+  .jump-close {border:0;background:transparent;color:#586c80;font-size:19px;line-height:1;padding:2px 5px;}
+  .jump-legend {display:flex;gap:11px;flex-wrap:wrap;margin:4px 0 10px;font-size:11px;color:#62768a;}
+  .legend-item {display:inline-flex;align-items:center;gap:5px;}
+  .swatch {width:11px;height:11px;border-radius:3px;border:1px solid #c6d3df;background:white;display:inline-block;}
+  .swatch.right {background:#cdf2df;border-color:#53ad7c;}
+  .swatch.wrong {background:#fbd9dd;border-color:#dd777e;}
+  .jump-search {display:grid;grid-template-columns:minmax(0,1fr) 58px;gap:7px;margin:7px 0 11px;}
+  .jump-search input {min-width:0;width:100%;border:1px solid #cbd8e5;border-radius:8px;padding:8px 10px;color:#24405a;background:#fff;font-size:12px;}
+  .jump-search button {border:0;border-radius:8px;background:#205579;color:#fff;font-weight:750;font-size:12px;}
+  .jump-grid {display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px;max-height:min(57vh,440px);overflow-y:auto;padding:5px;overscroll-behavior:contain;scrollbar-color:#aabccd transparent;}
+  .jump-cell {position:relative;min-height:36px;border:1px solid #cad6e3;background:#fff;border-radius:7px;font-size:12px;font-weight:700;color:#52647a;}
+  .jump-cell.is-right {background:#d4f1e1;border-color:#74c89e;color:#116542;}
+  .jump-cell.is-wrong {background:#f9dce0;border-color:#e5a1a8;color:#9b303e;}
+  .jump-cell.is-current {outline:2px solid #204766;outline-offset:1px;}
+  .jump-cell.is-bookmarked::after {content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:#be821a;}
+  .jump-cell:hover {filter:brightness(.96);}
+  .jump-empty {color:#6b7d8e;font-size:12px;padding:12px 2px;}
+  .muted {color:#6b7e90;font-size:12px;}
+  .reset {width:100%;padding:10px;background:transparent;border:1px solid #cbd8e4;border-radius:9px;color:#475d75;font-size:12px;margin-top:12px;}
+  .reset:hover {background:#f2f6fa;}
+  .question-panel {padding:28px 33px;min-height:600px;min-width:0;}
+  .q-topline {display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:21px;}
+  .q-tags {display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .q-number {color:#5a6f84;font-weight:750;font-size:12px;letter-spacing:.03em;}
+  .badge {display:inline-block;border-radius:99px;padding:5px 11px;background:#e4f5f2;color:#0c7160;font-size:12px;font-weight:800;}
+  .bookmark-btn {display:inline-flex;align-items:center;gap:7px;border:1px solid #d3dfeb;background:#fff;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:750;color:#46617e;}
+  .bookmark-btn.is-saved {border-color:#e7c67b;background:#fff5dc;color:#90600d;}
+  .bookmark-btn:hover {background:#f5f8fb;}
+  .bookmark-btn.is-saved:hover {background:#ffefca;}
+  .bookmark-symbol {font-size:18px;line-height:1;}
+  .stem {color:#24364b;font-size:16px;white-space:pre-wrap;line-height:1.83;margin:0 0 18px;}
+  .lab-wrap {overflow-x:auto;margin:20px 0;}
+  .labs {border-collapse:collapse;width:100%;font-size:13px;min-width:360px;}
+  .labs th {text-align:left;background:#eef4f9;color:#354e67;font-weight:750;}
+  .labs th,.labs td {padding:9px 12px;border-bottom:1px solid #e0e9f2;}
+  .labs td:nth-child(2) {font-weight:700;white-space:nowrap;}
+  .prompt {font-weight:800;font-size:17px;color:#152941;margin:22px 0 14px;}
+  .options {display:grid;gap:10px;}
+  .choice {width:100%;padding:13px 16px;background:#fff;border:1px solid #d8e2ec;border-radius:11px;display:flex;gap:13px;text-align:left;align-items:flex-start;line-height:1.55;color:#24374a;transition:border-color .12s,background .12s;}
+  .choice:not(:disabled):hover {border-color:#65a5cf;background:#f6fbff;}
+  .letter {display:inline-grid;place-items:center;flex:0 0 28px;height:28px;border:1px solid #c7d6e4;border-radius:7px;color:#435f76;font-size:13px;font-weight:800;}
+  .choice-text {flex:1;padding-top:2px;}
+  .choice-tag {font-weight:800;white-space:nowrap;font-size:12px;padding-top:3px;}
+  .choice.correct {border:2px solid #15966e;background:#ebfaf3;padding:12px 15px;color:#07583f;}
+  .choice.correct .letter {border-color:#15966e;color:#087258;}
+  .choice.wrong {border:2px solid #d25661;background:#fff0f1;padding:12px 15px;color:#922b35;}
+  .choice.wrong .letter {border-color:#d25661;color:#a8303d;}
+  .choice:not(.correct):not(.wrong):disabled {opacity:.75;}
+  .feedback {margin:24px 0 0;border-radius:12px;padding:19px 20px;background:#f6f9fc;border:1px solid #dfe7ef;}
+  .feedback.good {border-left:5px solid #168b69;}
+  .feedback.bad {border-left:5px solid #d05660;}
+  .feedback h2 {margin:0 0 5px;font-size:17px;}
+  .feedback.good h2 {color:#096b51;}.feedback.bad h2 {color:#ad3440;}
+  .feedback p {margin:7px 0 0;}
+  .explanations {margin-top:24px;padding-top:18px;border-top:1px solid #dae4ed;}
+  .explanations h3 {margin:0 0 12px;font-size:17px;}
+  .explain-row {display:grid;grid-template-columns:31px 1fr;gap:11px;padding:10px 0;border-top:1px solid #e6edf3;}
+  .explain-row:first-of-type {border-top:0;}
+  .explain-row p {margin:0;font-size:14px;color:#3d5064;line-height:1.65;}
+  .explain-key {font-size:12px;font-weight:800;color:#50647a;padding-top:2px;}
+  .explain-row.is-correct .explain-key {color:#11765e;}
+  .explain-row.is-chosen-wrong .explain-key {color:#b13b46;}
+  .takeaway {padding:12px 15px;background:#e9f4fa;border-radius:9px;margin-top:15px;color:#264e70;font-size:14px;}
+  .hint {font-size:12px;color:#687c90;margin:17px 0 0;}
+  .nav {display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #e2e9f0;margin-top:26px;padding-top:22px;}
+  .nav button {padding:10px 19px;border-radius:9px;border:1px solid #bfcfe0;background:white;color:#24445f;font-weight:750;}
+  .nav button:last-child {color:white;background:#173c61;border-color:#173c61;}
+  .nav button:hover:not(:disabled) {filter:brightness(.96);}
+  .nav button:disabled {opacity:.38;}
+  .nav-position {color:#64798c;font-size:12px;text-align:center;}
+  .empty {padding:30px 10px;color:#6a7d92;}
+  .empty button {border:1px solid #b8ccdc;border-radius:9px;background:#fff;color:#20415e;padding:9px 13px;font-weight:700;margin-top:12px;}
+  noscript {display:block;margin:20px;padding:14px;border:1px solid red;background:#fff5f5;}
+  @media(max-width:850px) {
+    .app {grid-template-columns:1fr;gap:15px;margin-top:17px;}
+    .sidebar {position:static;}
+    .sidebar-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:0 14px;}
+    .sidebar .field {margin:8px 0;}
+    .systems {grid-template-columns:repeat(3,1fr);}
+    .question-panel {padding:22px 20px;}
+  }
+  @media(max-width:560px) {
+    .layout {padding:0 12px;}
+    .site-header {padding:19px 0;}
+    .header-count {display:none;}
+    .sidebar {padding:17px;}
+    .systems {grid-template-columns:1fr;}
+    .sidebar-grid {grid-template-columns:1fr;}
+    .question-panel {padding:20px 15px;}
+    .stem {font-size:15px;}
+    .choice {padding:11px;gap:9px;}
+    .choice.correct,.choice.wrong {padding:10px;}
+    .choice-tag {display:none;}
+    .nav button {padding:10px 12px;}
+    .jump-popover {width:calc(100vw - 24px);}
+    .jump-grid {grid-template-columns:repeat(6,minmax(0,1fr));}
+    .q-topline {align-items:flex-start;}
+  }
+  @media(prefers-reduced-motion:reduce) {
+    body::before,body::after {animation:none !important;}
+    *,*::before,*::after {scroll-behavior:auto !important;transition:none !important;}
+  }
+
+  /* DARK THEME: Default on first visit. Light theme retains the original styles. */
+  html[data-theme="light"] {background:#eaf0f8;color:#17283f;color-scheme:light;}
+  body[data-theme="light"] {color:#17283f;background:#eaf0f8;color-scheme:light;}
+  body[data-theme="dark"] {
+    color: #edf3fc;
+    background:
+      radial-gradient(circle at 20% 78%, rgba(255,166,122,.10), transparent 20%),
+      radial-gradient(circle at 56% 28%, rgba(163,126,255,.10), transparent 24%),
+      radial-gradient(circle at 78% 62%, rgba(255,180,130,.06), transparent 18%),
+      linear-gradient(180deg, #020711 0%, #07101e 38%, #091628 70%, #0c1830 100%);
+    color-scheme: dark;
+  }
+  body[data-theme="dark"]::before {
+    background:
+      radial-gradient(circle at 12% 76%, rgba(255,176,124,.20) 0%, rgba(255,176,124,.08) 18%, transparent 34%),
+      radial-gradient(circle at 52% 30%, rgba(144,112,255,.18) 0%, rgba(144,112,255,.08) 15%, transparent 31%),
+      radial-gradient(circle at 70% 52%, rgba(255,191,140,.10) 0%, rgba(255,191,140,.05) 12%, transparent 26%),
+      radial-gradient(circle at 34% 18%, rgba(140,120,255,.10) 0%, rgba(140,120,255,.04) 10%, transparent 22%),
+      linear-gradient(180deg, rgba(5,10,20,.22), rgba(4,10,22,.08));
+    animation: nebulaDrift 30s ease-in-out infinite alternate;
+    opacity: .95;
+  }
+  body[data-theme="dark"]::after {
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,.96) 0 .7px, transparent 1px),
+      radial-gradient(circle, rgba(190,210,255,.7) 0 .8px, transparent 1.1px),
+      radial-gradient(circle, rgba(255,226,210,.45) 0 .65px, transparent 1px);
+    background-size: 170px 170px, 210px 210px, 260px 260px;
+    background-position: 0 0, 35px 55px, 90px 120px;
+    opacity: .70;
+    animation: starDrift 100s linear infinite;
+  }
+  @keyframes nebulaDrift {
+    0% { transform: translate3d(0,0,0) scale(1.03); }
+    50% { transform: translate3d(1.3%,-1%,0) scale(1.06); }
+    100% { transform: translate3d(-1%,1.6%,0) scale(1.04); }
+  }
+  @keyframes starDrift {
+    from { transform: translate3d(0,0,0); }
+    to { transform: translate3d(0,40px,0); }
+  }
+  body[data-theme="dark"] .site-header {background:linear-gradient(110deg,#060d18 0%,#10192c 62%,#14243b 100%);border-bottom:1px solid #324964;box-shadow:0 8px 36px #00000050;}
+  body[data-theme="dark"] .mark {background:#8ed9e512;color:#b5f4ea;border-color:#577990;}
+  body[data-theme="dark"] .subhead {color:#b4c6d9;}
+  body[data-theme="dark"] .panel {background:rgba(9,17,30,.84);border-color:#2c3c54;box-shadow:0 15px 48px #00000060;backdrop-filter: blur(7px);}
+  body[data-theme="dark"] .aside-heading .sparkle {color:#73d9d0;}
+  body[data-theme="dark"] .label,body[data-theme="dark"] .q-number,body[data-theme="dark"] .muted,body[data-theme="dark"] .hint,
+  body[data-theme="dark"] .nav-position,body[data-theme="dark"] .jump-legend {color:#b4c5d9;}
+  body[data-theme="dark"] .section-title {color:#dae6f6;}
+  body[data-theme="dark"] select,body[data-theme="dark"] .jump-toggle,
+  body[data-theme="dark"] .reset,
+  body[data-theme="dark"] .jump-search input {background:#17273d;border-color:#3b526e;color:#f2f7ff;}
+  body[data-theme="dark"] select option {background:#17273d;color:#f2f7ff;}
+  body[data-theme="dark"] .jump-toggle:hover,body[data-theme="dark"] .jump-toggle[aria-expanded="true"] {border-color:#81c5ec;}
+  body[data-theme="dark"] .progress-track,body[data-theme="dark"] .system-track {background:#26374e;}
+  body[data-theme="dark"] .stat {background:#182a40;border-color:#304158;}
+  body[data-theme="dark"] .stat strong {color:#f0f6fe;}
+  body[data-theme="dark"] .stat span {color:#b7c8db;}
+  body[data-theme="dark"] .side-divider,body[data-theme="dark"] .nav,
+  body[data-theme="dark"] .explanations {border-color:#35445b;}
+  body[data-theme="dark"] .system-card {background:#18283d;border-color:#34465d;}
+  body[data-theme="dark"] .system-name,body[data-theme="dark"] .system-accuracy {color:#edf5ff;}
+  body[data-theme="dark"] .system-meta {color:#b9cbdd;}
+  body[data-theme="dark"] .jump-popover {background:#111e31;border-color:#3a4e66;box-shadow:0 25px 90px #000a;}
+  body[data-theme="dark"] .jump-popover-top strong {color:#f0f6ff;}
+  body[data-theme="dark"] .jump-close {color:#d7e3f0;}
+  body[data-theme="dark"] .jump-cell.is-current {outline-color:#83c6fc;}
+  /* Keep the requested white unanswered / green correct / red incorrect jump tiles. */
+  body[data-theme="dark"] .jump-cell.is-unanswered {background:#fff;color:#33455c;border-color:#d2dce8;}
+  body[data-theme="dark"] .jump-cell.is-right {background:#d4f1e1;color:#116542;border-color:#74c89e;}
+  body[data-theme="dark"] .jump-cell.is-wrong {background:#f9dce0;color:#9b303e;border-color:#e5a1a8;}
+  body[data-theme="dark"] .jump-empty {color:#c8d6e6;}
+  body[data-theme="dark"] .reset:hover {background:#23354b;}
+  body[data-theme="dark"] .badge {background:#163e3e;color:#9cedd6;}
+  body[data-theme="dark"] .bookmark-btn {background:#182b42;border-color:#40546c;color:#d6e5f6;}
+  body[data-theme="dark"] .bookmark-btn:hover {background:#263950;}
+  body[data-theme="dark"] .bookmark-btn.is-saved {background:#44371e;color:#ffdc8b;border-color:#88662e;}
+  body[data-theme="dark"] .bookmark-btn.is-saved:hover {background:#564220;}
+  body[data-theme="dark"] .stem {color:#f0f5fc;}
+  body[data-theme="dark"] .prompt {color:#f9fbff;}
+  body[data-theme="dark"] .labs th {background:#1b334b;color:#eef6ff;}
+  body[data-theme="dark"] .labs th,body[data-theme="dark"] .labs td {border-color:#35475b;}
+  body[data-theme="dark"] .labs td {color:#e5edf8;}
+  body[data-theme="dark"] .choice {background:#16263b;border-color:#3b506a;color:#f0f5fb;}
+  body[data-theme="dark"] .choice:not(:disabled):hover {border-color:#78bee8;background:#1e3650;}
+  body[data-theme="dark"] .letter {border-color:#526e8b;color:#d9eafb;background:#203349;}
+  body[data-theme="dark"] .choice.correct {border-color:#31bc8c;background:#103c36;color:#d8ffee;}
+  body[data-theme="dark"] .choice.correct .letter {border-color:#43c99c;background:#175347;color:#d5ffee;}
+  body[data-theme="dark"] .choice.wrong {border-color:#f07887;background:#47222d;color:#ffe1e5;}
+  body[data-theme="dark"] .choice.wrong .letter {border-color:#f07887;background:#67313f;color:#ffe4e9;}
+  body[data-theme="dark"] .choice:not(.correct):not(.wrong):disabled {opacity:.83;}
+  body[data-theme="dark"] .feedback {background:#132438;border-color:#3b4f66;color:#eaf2fc;}
+  body[data-theme="dark"] .feedback.good {border-left-color:#2bc48d;}
+  body[data-theme="dark"] .feedback.bad {border-left-color:#f17583;}
+  body[data-theme="dark"] .feedback.good h2 {color:#8bf2bb;}
+  body[data-theme="dark"] .feedback.bad h2 {color:#ff9eaa;}
+  body[data-theme="dark"] .explain-row {border-color:#31445b;}
+  body[data-theme="dark"] .explain-row p {color:#e0eafa;}
+  body[data-theme="dark"] .explain-key {color:#b9cde2;}
+  body[data-theme="dark"] .explain-row.is-correct .explain-key {color:#8bf2bb;}
+  body[data-theme="dark"] .explain-row.is-chosen-wrong .explain-key {color:#ff9eaa;}
+  body[data-theme="dark"] .takeaway {background:#163a4b;color:#d6f3ff;border:1px solid #295b70;}
+  body[data-theme="dark"] .nav button,body[data-theme="dark"] .empty button {background:#1b3048;border-color:#4b637e;color:#edf4ff;}
+  body[data-theme="dark"] .nav button:last-child {background:#25638b;border-color:#3883b4;color:#fff;}
+  body[data-theme="dark"] .empty {color:#c3d3e6;}
+  body[data-theme="dark"] .theme-toggle {background:#243c57;border-color:#4b6b86;color:#f5f9ff;}
+  body[data-theme="dark"] .theme-toggle:hover {background:#30506f;}
+  body[data-theme="dark"] :focus-visible {outline-color:#80c7f3;}
+
+</style>
+</head>
+<body data-theme="dark">
+<header class="site-header"><div class="layout header-inner">
+  <div class="identity"><div class="mark" aria-hidden="true">S1</div><div><h1>Step 1 Question Bank</h1><div class="subhead">Cardiology · Nephrology · Pulmonology</div></div></div>
+  <div class="header-actions">
+    <div class="header-count" id="header-count">1000 questions to master</div>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="true" aria-label="Switch to light theme">☀ Light mode</button>
+  </div>
+</div></header>
+<main class="layout app">
+  <aside class="panel sidebar" aria-label="Question bank controls">
+    <div class="aside-heading"><h2>Your progress</h2><span class="sparkle" aria-hidden="true">✦</span></div>
+    <div class="progress-info"><span>Questions completed</span><strong id="progress-text">0 / 1000</strong></div>
+    <div class="progress-track" role="progressbar" aria-label="Question completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="stats"><div class="stat"><strong id="correct-count">0</strong><span>Correct</span></div><div class="stat"><strong id="wrong-count">0</strong><span>Incorrect</span></div><div class="stat"><strong id="accuracy">—</strong><span>Accuracy</span></div><div class="stat"><strong id="bookmarks-count">0</strong><span>Marked</span></div></div>
+    <hr class="side-divider">
+    <h3 class="section-title">Performance by system</h3>
+    <div class="systems" id="system-stats" aria-live="polite"></div>
+    <hr class="side-divider">
+    <div class="sidebar-grid">
+      <div class="field"><label class="label" for="topic-filter">System</label><select id="topic-filter"><option value="All">All systems</option><option value="Cardiology">Cardiology</option><option value="Nephrology">Nephrology</option><option value="Pulmonology">Pulmonology</option></select></div>
+      <div class="field"><label class="label" for="review-filter">Review</label><select id="review-filter"><option value="all">All questions</option><option value="bookmarked">⚑ Marked for later</option><option value="incorrect">Incorrect answers</option><option value="unanswered">Unanswered</option><option value="correct">Correct answers</option></select></div>
+      <div class="field jump-wrap" id="jump-wrap">
+        <span class="label" id="jump-label">Jump to question</span>
+        <button class="jump-toggle" type="button" id="jump-toggle" aria-labelledby="jump-label jump-toggle" aria-controls="jump-popover" aria-expanded="false"><span id="jump-current">Question 1</span><span aria-hidden="true">▦</span></button>
+        <div class="jump-popover" id="jump-popover" role="region" aria-label="Question number palette" hidden>
+          <div class="jump-popover-top"><strong>Jump to a question</strong><button type="button" class="jump-close" id="jump-close" aria-label="Close question palette">×</button></div>
+          <div class="jump-legend"><span class="legend-item"><i class="swatch right"></i>Correct</span><span class="legend-item"><i class="swatch wrong"></i>Incorrect</span><span class="legend-item"><i class="swatch"></i>Unanswered</span></div>
+          <div class="jump-search"><input id="jump-number-search" type="number" min="1" placeholder="Jump to question #" aria-label="Enter a question number"><button type="button" id="jump-number-go">Go</button></div>
+          <div class="jump-grid" id="jump-grid"></div>
+          <p class="muted" style="margin:9px 2px 0">Gold dot = marked for later</p>
+        </div>
+      </div>
+      
+    </div>
+    <p class="muted">Your answers and marked questions are stored in this browser. Select a question to see all five explanations.</p>
+    <button type="button" class="reset" id="reset-progress">Reset answer history</button>
+  </aside>
+  <section class="panel question-panel" aria-label="Practice question">
+    <div id="question-content" aria-live="off"></div>
+    <div class="nav" aria-label="Question navigation"><button type="button" id="previous">← Previous</button><span class="nav-position" id="nav-position"></span><button type="button" id="next">Next →</button></div>
+  </section>
+</main>
+<noscript>This question bank requires JavaScript to run. Enable JavaScript in your browser and reload the page.</noscript>
+<script src="./questions.js"></script>
+<script>
+(function () {
+  'use strict';
+  const items = Array.isArray(window.STEP1_QUESTIONS) ? [...window.STEP1_QUESTIONS].sort((a,b)=>a.id-b.id) : [];
+  const byId = new Map(items.map(q=>[q.id,q]));
+  // Keep both original keys intact so upgrading never erases previously selected answers.
+  const ANSWERS_KEY = 'step1-practice-answers-v1';
+  const CURRENT_KEY = 'step1-practice-current-v1';
+  const BOOKMARKS_KEY = 'step1-practice-bookmarks-v1';
+  const THEME_KEY = 'step1-practice-theme-v1';
+  const chars = ['A','B','C','D','E'];
+  const topics = ['Cardiology','Nephrology','Pulmonology'];
+  const getSaved = (key,fallback) => { try { const raw=localStorage.getItem(key); return raw===null?fallback:JSON.parse(raw); } catch(_) {return fallback;} };
+  const setSaved = (key,value) => {try {localStorage.setItem(key,JSON.stringify(value));} catch(_) {} };
+  const rawAnswers=getSaved(ANSWERS_KEY,{});
+  let answers=rawAnswers && typeof rawAnswers==='object' && !Array.isArray(rawAnswers)?rawAnswers:{};
+  const rawBookmarks=getSaved(BOOKMARKS_KEY,[]);
+  let bookmarks=new Set(Array.isArray(rawBookmarks)?rawBookmarks.map(Number).filter(id=>byId.has(id)):[]);
+  let pinnedCurrentId=null; // Keep explanation visible while reviewing unanswered questions.
+  let currentId=Number(getSaved(CURRENT_KEY,items[0]?.id));
+  if(!byId.has(currentId)) currentId=items[0]?.id;
+  const dom = {
+    content:document.getElementById('question-content'), topic:document.getElementById('topic-filter'), review:document.getElementById('review-filter'),
+    jumpToggle:document.getElementById('jump-toggle'), jumpPopover:document.getElementById('jump-popover'), jumpClose:document.getElementById('jump-close'),
+    jumpGrid:document.getElementById('jump-grid'), jumpCurrent:document.getElementById('jump-current'), jumpWrap:document.getElementById('jump-wrap'),
+    jumpSearch:document.getElementById('jump-number-search'), jumpGo:document.getElementById('jump-number-go'),
+    progressText:document.getElementById('progress-text'), progressTrack:document.getElementById('progress-track'), progressFill:document.getElementById('progress-fill'),
+    correctCount:document.getElementById('correct-count'), wrongCount:document.getElementById('wrong-count'), accuracy:document.getElementById('accuracy'), bookmarkedCount:document.getElementById('bookmarks-count'),
+    systemStats:document.getElementById('system-stats'), headerCount:document.getElementById('header-count'),
+    previous:document.getElementById('previous'),next:document.getElementById('next'),position:document.getElementById('nav-position'),
+    reset:document.getElementById('reset-progress')
+  };
+  const make = (tag,className,text) => {const el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;};
+  const isAnswered = q=>Number.isInteger(answers[q.id])&&answers[q.id]>=0&&answers[q.id]<q.options.length;
+  const isRight = q=>isAnswered(q)&&answers[q.id]===q.correct;
+  const status = q=>!isAnswered(q)?'unanswered':isRight(q)?'right':'wrong';
+  const currentList = () => items.filter(q=>{
+    if(dom.topic.value!=='All'&&q.topic!==dom.topic.value) return false;
+    if(dom.review.value==='unanswered' && q.id===currentId && q.id===pinnedCurrentId) return true;
+    if(dom.review.value==='bookmarked') return bookmarks.has(q.id);
+    if(dom.review.value==='incorrect') return status(q)==='wrong';
+    if(dom.review.value==='unanswered') return status(q)==='unanswered';
+    if(dom.review.value==='correct') return status(q)==='right';
+    return true;
+  });
+  function saveAnswers(){setSaved(ANSWERS_KEY,answers);setSaved(CURRENT_KEY,currentId);}
+  function saveBookmarks(){setSaved(BOOKMARKS_KEY,[...bookmarks].sort((a,b)=>a-b));}
+  function closePalette(){dom.jumpPopover.hidden=true;dom.jumpToggle.setAttribute('aria-expanded','false');}
+  function openPalette(){dom.jumpPopover.hidden=false;dom.jumpToggle.setAttribute('aria-expanded','true');}
+  function refreshStats(){
+    const answered=items.filter(isAnswered);
+    const right=answered.filter(isRight).length;
+    const pct=items.length?100*answered.length/items.length:0;
+    dom.progressText.textContent=`${answered.length} / ${items.length}`;
+    dom.progressFill.style.width=`${pct}%`;
+    dom.progressTrack.setAttribute('aria-valuenow',String(Math.round(pct)));
+    dom.correctCount.textContent=String(right);
+    dom.wrongCount.textContent=String(answered.length-right);
+    dom.accuracy.textContent=answered.length?`${Math.round(100*right/answered.length)}%`:'—';
+    dom.bookmarkedCount.textContent=String(bookmarks.size);
+    dom.headerCount.textContent=`${items.length} questions to master`;
+    dom.systemStats.replaceChildren();
+    for(const topic of topics){
+      const all=items.filter(q=>q.topic===topic),done=all.filter(isAnswered),correct=done.filter(isRight);
+      const card=make('div','system-card');card.dataset.system=topic;
+      const top=make('div','system-top');top.append(make('span','system-name',topic),make('span','system-accuracy',done.length?`${Math.round(100*correct.length/done.length)}%`:'—'));
+      const meta=make('div','system-meta');meta.append(make('span','',`${done.length}/${all.length} answered`),make('span','',`${correct.length} right · ${done.length-correct.length} wrong`));
+      const track=make('div','system-track');const fill=make('div','system-fill');fill.style.width=all.length?`${100*done.length/all.length}%`:'0%';track.append(fill);
+      card.append(top,meta,track);dom.systemStats.append(card);
+    }
+  }
+  function refreshPalette(list){
+    dom.jumpGrid.replaceChildren();
+    dom.jumpCurrent.textContent=list.length&&byId.has(currentId)?`Question ${currentId}`:`No questions (${list.length})`;
+    if(!list.length) {dom.jumpGrid.append(make('div','jump-empty','No questions match these filters.'));return;}
+    const frag=document.createDocumentFragment();
+    for(const q of list){
+      const state=status(q);
+      const button=make('button',`jump-cell is-${state}`,String(q.id));button.type='button';
+      if(q.id===currentId){button.classList.add('is-current');button.setAttribute('aria-current','true');}
+      if(bookmarks.has(q.id))button.classList.add('is-bookmarked');
+      button.title=`Question ${q.id} — ${q.topic} — ${state}${bookmarks.has(q.id)?' — marked':''}`;
+      button.setAttribute('aria-label',button.title);
+      button.addEventListener('click',()=>{pinnedCurrentId=null;currentId=q.id;saveAnswers();closePalette();render();window.scrollTo({top:0,behavior:'auto'});});
+      frag.append(button);
+    }
+    dom.jumpGrid.append(frag);
+  }
+  function choose(index){
+    const q=byId.get(currentId);
+    if(!q||isAnswered(q))return;
+    answers[q.id]=index;if(dom.review.value==='unanswered')pinnedCurrentId=q.id;saveAnswers();render();
+    const feedback=document.getElementById('answer-feedback');
+    if(feedback){feedback.focus({preventScroll:true});feedback.scrollIntoView({behavior:'auto',block:'nearest'});}
+  }
+  function toggleBookmark(id){
+    if(bookmarks.has(id)) bookmarks.delete(id); else bookmarks.add(id);
+    saveBookmarks();render();
+  }
+  function render(){
+    const list=currentList();
+    if(list.length&&!list.some(q=>q.id===currentId)){currentId=list[0].id;saveAnswers();}
+    refreshStats();refreshPalette(list);
+    const pos=list.findIndex(q=>q.id===currentId);
+    const q=list[pos];
+    dom.previous.disabled=pos<=0;
+    dom.next.disabled=pos<0||pos>=list.length-1;
+    dom.position.textContent=pos<0?'No questions':`${pos+1} of ${list.length}`;
+    dom.content.replaceChildren();
+    if(!q){
+      dom.content.append(make('h2','','No questions to show'));
+      dom.content.append(make('p','empty',dom.review.value==='bookmarked'?'No marked questions match this system yet. Use “Mark for later” on any question to save it here.':'Nothing matches the current filters. You can change the System or Review menu.'));
+      const clear=make('button','','Show all questions');clear.type='button';
+      clear.addEventListener('click',()=>{dom.review.value='all';dom.topic.value='All';currentId=items[0]?.id;saveAnswers();render();});
+      dom.content.append(clear);return;
+    }
+    const answered=isAnswered(q),selected=answers[q.id];
+    const heading=make('div','q-topline'),tags=make('div','q-tags');
+    tags.append(make('span','q-number',`QUESTION ${q.id} OF ${items.length}`),make('span','badge',q.topic));
+    const marked=bookmarks.has(q.id);
+    const bookmarkBtn=make('button',`bookmark-btn${marked?' is-saved':''}`);bookmarkBtn.type='button';bookmarkBtn.setAttribute('aria-pressed',String(marked));
+    bookmarkBtn.setAttribute('aria-label',marked?`Remove question ${q.id} from marked questions`:`Mark question ${q.id} for later`);
+    bookmarkBtn.append(make('span','bookmark-symbol',marked?'⚑':'⚐'),make('span','',marked?'Marked for later':'Mark for later'));
+    bookmarkBtn.addEventListener('click',()=>toggleBookmark(q.id));heading.append(tags,bookmarkBtn);
+    dom.content.append(heading,make('p','stem',q.stem));
+    if(Array.isArray(q.labs)&&q.labs.length){
+      const wrapper=make('div','lab-wrap'),table=make('table','labs'),thead=make('thead'),tr=make('tr');
+      ['Test','Patient value','Reference range'].forEach(t=>tr.append(make('th','',t)));thead.append(tr);table.append(thead);
+      const tbody=make('tbody');
+      for(const lab of q.labs){const row=make('tr');lab.forEach(value=>row.append(make('td','',value)));tbody.append(row);}
+      table.append(tbody);wrapper.append(table);dom.content.append(wrapper);
+    }
+    dom.content.append(make('p','prompt',q.prompt));
+    const options=make('div','options');
+    q.options.forEach((value,i)=>{
+      const btn=make('button','choice');btn.type='button';btn.disabled=answered;
+      if(answered&&i===q.correct)btn.classList.add('correct');
+      if(answered&&i===selected&&i!==q.correct)btn.classList.add('wrong');
+      btn.setAttribute('aria-label',`Answer ${chars[i]}: ${value}`);
+      btn.append(make('span','letter',chars[i]),make('span','choice-text',value));
+      if(answered&&i===q.correct)btn.append(make('span','choice-tag','Correct answer'));
+      else if(answered&&i===selected)btn.append(make('span','choice-tag','Your answer'));
+      btn.addEventListener('click',()=>choose(i));options.append(btn);
+    });
+    dom.content.append(options);
+    if(answered){
+      const right=selected===q.correct,fb=make('section',`feedback ${right?'good':'bad'}`);fb.id='answer-feedback';fb.tabIndex=-1;fb.setAttribute('aria-live','polite');
+      fb.append(make('h2','',right?'Correct!':'Incorrect'));
+      fb.append(make('p','',`Correct answer: ${chars[q.correct]}. ${q.options[q.correct]}`));
+      if(!right)fb.append(make('p','',`You selected: ${chars[selected]}. ${q.options[selected]}`));
+      const explain=make('div','explanations');explain.append(make('h3','','Explanation of every answer choice'));
+      q.options.forEach((option,i)=>{
+        const row=make('div','explain-row');if(i===q.correct)row.classList.add('is-correct');if(i===selected&&i!==q.correct)row.classList.add('is-chosen-wrong');
+        row.append(make('span','explain-key',`${chars[i]}.`),make('p','',`${option} — ${q.explanations[i]}`));explain.append(row);
+      });
+      fb.append(explain);if(q.takeaway)fb.append(make('div','takeaway',`High-yield takeaway: ${q.takeaway}`));dom.content.append(fb);
+    } else dom.content.append(make('p','hint','Select an answer to see whether it is correct and why each of the five options is right or wrong.'));
+  }
+  function navigate(direction){const list=currentList(),i=list.findIndex(q=>q.id===currentId);if(i+direction<0||i+direction>=list.length)return;currentId=list[i+direction].id;pinnedCurrentId=null;saveAnswers();render();window.scrollTo({top:0,behavior:'auto'});}
+  dom.previous.addEventListener('click',()=>navigate(-1));dom.next.addEventListener('click',()=>navigate(1));
+  const onFilter=()=>{pinnedCurrentId=null;closePalette();const list=currentList();currentId=list[0]?.id;saveAnswers();render();};
+  dom.topic.addEventListener('change',onFilter);dom.review.addEventListener('change',onFilter);
+  dom.jumpToggle.addEventListener('click',()=>dom.jumpPopover.hidden?openPalette():closePalette());
+  dom.jumpClose.addEventListener('click',()=>{closePalette();dom.jumpToggle.focus();});
+  function goToNumber(){
+    const id=Number(dom.jumpSearch.value);const q=byId.get(id);
+    if(!q){dom.jumpSearch.setCustomValidity('Enter an existing question number.');dom.jumpSearch.reportValidity();return;}
+    dom.jumpSearch.setCustomValidity('');dom.review.value='all';dom.topic.value='All';
+    pinnedCurrentId=null;currentId=q.id;saveAnswers();closePalette();render();window.scrollTo({top:0,behavior:'auto'});
+  }
+  dom.jumpGo.addEventListener('click',goToNumber);
+  dom.jumpSearch.addEventListener('keydown',e=>{if(e.key==='Enter')goToNumber();});
+  dom.jumpSearch.addEventListener('input',()=>dom.jumpSearch.setCustomValidity(''));
+  document.addEventListener('click',event=>{if(!dom.jumpWrap.contains(event.target))closePalette();});
+  dom.reset.addEventListener('click',()=>{
+    if(confirm('Clear your saved answers and accuracy statistics for all questions? Your marked questions will be kept.')){
+      answers={};pinnedCurrentId=null;saveAnswers();if(dom.review.value==='incorrect'||dom.review.value==='correct')dom.review.value='all';render();
+    }
+  });
+  // Theme selection is independent of question/answer state, and is saved per browser.
+  const themeButton=document.getElementById('theme-toggle');
+  const storedTheme=getSaved(THEME_KEY,'dark');
+  let theme=storedTheme==='light'?'light':'dark';
+  function applyTheme(){
+    document.body.dataset.theme=theme;
+    document.documentElement.dataset.theme=theme;
+    document.documentElement.style.colorScheme=theme;
+    document.querySelector('meta[name="theme-color"]').setAttribute('content',theme==='dark'?'#09111f':'#14233a');
+    themeButton.textContent=theme==='dark'?'☀ Light mode':'☾ Dark mode';
+    themeButton.setAttribute('aria-label',theme==='dark'?'Switch to light theme':'Switch to dark theme');
+    themeButton.setAttribute('aria-pressed',String(theme==='dark'));
+  }
+  themeButton.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';setSaved(THEME_KEY,theme);applyTheme();});
+  applyTheme();
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&!dom.jumpPopover.hidden){closePalette();dom.jumpToggle.focus();return;}
+    if(event.altKey||event.ctrlKey||event.metaKey||['SELECT','INPUT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName)||!dom.jumpPopover.hidden)return;
+    if(/^[1-5]$/.test(event.key))choose(Number(event.key)-1);
+    else if(event.key==='ArrowLeft')navigate(-1);
+    else if(event.key==='ArrowRight')navigate(1);
+  });
+  for(const q of items){
+    if(!Number.isInteger(q.id)||!Array.isArray(q.options)||q.options.length!==5||!Array.isArray(q.explanations)||q.explanations.length!==5||!Number.isInteger(q.correct)||q.correct<0||q.correct>4){
+      console.error('Invalid question data:',q);dom.content.append(make('p','empty','Question data needs correction. Check the browser console.'));return;
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
