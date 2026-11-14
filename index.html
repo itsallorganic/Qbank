@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14233a">
+  <meta name="description" content="Interactive original Step 1-style practice questions in cardiology, nephrology, and pulmonology.">
+  <title>Step 1 Practice | Interactive Question Bank</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #18283b; background: #f5f7fb; color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin:0; line-height:1.55; }
+    button,select { font: inherit; }
+    button { cursor:pointer; }
+    button:disabled { cursor: default; }
+    :focus-visible { outline:3px solid #4b8ceb; outline-offset:3px; }
+    .site-header { background:#13243b; color:white; padding:22px 0 24px; }
+    .layout { max-width:1120px; padding:0 20px; margin:0 auto; }
+    .header-inner { display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
+    .identity { display:flex; align-items:center; gap:12px; }
+    .mark { display:grid; place-items:center; width:46px; height:46px; border:1px solid #85a4c4; color:#b7f1e2; border-radius:13px; font-size:21px; font-weight:750; }
+    h1 { font-size:clamp(21px,3vw,29px); margin:0; line-height:1.18; letter-spacing:-.025em; }
+    .subhead { color:#bed0e4; font-size:13px; margin-top:5px; }
+    .top-chip { color:#d3e9f5; border:1px solid #4b6580; padding:7px 12px; border-radius:999px; font-size:12px; }
+    .app { display:grid; grid-template-columns:255px minmax(0,1fr); gap:22px; margin-top:25px; margin-bottom:60px; align-items:start; }
+    .panel { background:white; border:1px solid #e1e8f0; border-radius:14px; box-shadow:0 6px 24px #162b4510; }
+    .sidebar { padding:20px; position:sticky; top:20px; }
+    .sidebar h2 { font-size:16px; margin:0 0 14px; }
+    .sidebar .field { margin:18px 0; }
+    .label { display:block; color:#53647a; font-weight:650; font-size:12px; margin-bottom:6px; }
+    select { width:100%; padding:10px 30px 10px 10px; color:#1a2e43; background:white; border:1px solid #cad5e2; border-radius:8px; }
+    .progress-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; font-size:13px; }
+    .progress-track { height:8px; background:#e8eef5; border-radius:99px; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background:#168c7b; border-radius:99px; transition:width .25s ease; }
+    .stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:17px; }
+    .stat { padding:12px 8px; background:#f5f8fc; border:1px solid #ebf0f6; border-radius:9px; text-align:center; }
+    .stat strong { display:block; font-size:20px; color:#16304b; line-height:1.2; }
+    .stat span { font-size:12px; color:#617188; }
+    .muted { color:#68788b; font-size:12px; }
+    .reset { width:100%; padding:10px; background:transparent; border:1px solid #cad5e2; border-radius:9px; color:#40536b; font-size:13px; margin-top:14px; }
+    .reset:hover { background:#f4f7fa; }
+    .question-panel { padding:28px 32px; min-height:560px; }
+    .q-topline { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-bottom:22px; }
+    .q-number { color:#566a81; font-weight:600; font-size:13px; }
+    .badge { display:inline-block; border-radius:99px; padding:5px 11px; background:#e6f5f2; color:#0a705f; font-size:12px; font-weight:750; }
+    .stem { color:#24344a; font-size:16px; white-space:pre-wrap; line-height:1.78; margin:0 0 18px; }
+    .lab-wrap { overflow-x:auto; margin:20px 0; }
+    .labs { border-collapse:collapse; width:100%; font-size:13px; min-width:360px; }
+    .labs th { text-align:left; background:#edf3f9; color:#364c63; font-weight:700; }
+    .labs th,.labs td { padding:9px 12px; border-bottom:1px solid #e0e9f2; }
+    .labs td:nth-child(2) { font-weight:650; white-space:nowrap; }
+    .prompt { font-weight:750; font-size:17px; color:#14243b; margin:22px 0 14px; }
+    .options { display:grid; gap:10px; }
+    .choice { width:100%; padding:13px 16px; background:#fff; border:1px solid #d7e1ec; border-radius:11px; display:flex; gap:13px; text-align:left; align-items:flex-start; line-height:1.55; color:#24344a; transition:border-color .1s, background .1s; }
+    .choice:not(:disabled):hover { border-color:#6194c1; background:#f7fbff; }
+    .letter { display:inline-grid; place-items:center; flex:0 0 28px; height:28px; border:1px solid #c8d5e3; border-radius:7px; color:#435c74; font-size:13px; font-weight:750; }
+    .choice-text { flex:1; padding-top:2px; }
+    .choice-tag { font-weight:700; white-space:nowrap; font-size:12px; padding-top:3px; }
+    .choice.correct { border:2px solid #118266; background:#ecf9f4; padding:12px 15px; color:#065642; }
+    .choice.correct .letter { border-color:#118266; color:#087258; }
+    .choice.wrong { border:2px solid #c54c52; background:#fff1f1; padding:12px 15px; color:#8a2731; }
+    .choice.wrong .letter { border-color:#c54c52; color:#a12e38; }
+    .choice:not(.correct):not(.wrong):disabled { opacity:.72; }
+    .feedback { margin:24px 0 0; border-radius:12px; padding:19px 20px; background:#f6f9fc; border:1px solid #dfe7ef; }
+    .feedback.good { border-left:5px solid #168466; }
+    .feedback.bad { border-left:5px solid #c34a53; }
+    .feedback h2 { margin:0 0 5px; font-size:17px; }
+    .feedback.good h2 { color:#096b51; } .feedback.bad h2 { color:#ad3440; }
+    .feedback p { margin:7px 0 0; }
+    .explanations { margin-top:24px; padding-top:18px; border-top:1px solid #dae4ed; }
+    .explanations h3 { margin:0 0 12px; font-size:17px; }
+    .explain-row { display:grid; grid-template-columns:31px 1fr; gap:11px; padding:10px 0; border-top:1px solid #e6edf3; }
+    .explain-row:first-of-type { border-top:0; }
+    .explain-row p { margin:0; font-size:14px; color:#3d5064; line-height:1.65; }
+    .explain-key { font-size:12px; font-weight:800; color:#50647a; padding-top:2px; }
+    .explain-row.is-correct .explain-key { color:#11765e; }
+    .explain-row.is-chosen-wrong .explain-key { color:#b13b46; }
+    .takeaway { padding:12px 15px; background:#eaf3fa; border-radius:9px; margin-top:15px; color:#254e6e; font-size:14px; }
+    .hint { font-size:12px; color:#68788b; margin:17px 0 0; }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:12px; border-top:1px solid #e2e9f0; margin-top:26px; padding-top:22px; }
+    .nav button { padding:10px 19px; border-radius:9px; border:1px solid #bccbdc; background:white; color:#20415e; font-weight:650; }
+    .nav button:last-child { color:white; background:#173c61; border-color:#173c61; }
+    .nav button:hover:not(:disabled) { filter:brightness(.96); }
+    .nav button:disabled { opacity:.38; }
+    .nav-position { color:#63758a; font-size:12px; text-align:center; }
+    .footer-note { text-align:center; font-size:12px; color:#718095; padding:0 16px 35px; }
+    .empty { padding:30px 10px; color:#6a7d92; }
+    noscript { display:block; margin:20px; padding:14px; border:1px solid red; background:#fff5f5; }
+    @media(max-width:800px) { .app { grid-template-columns:1fr; gap:14px; margin-top:16px; } .sidebar { position:static; } .sidebar-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; } .sidebar .field { margin:8px 0; } .question-panel { padding:21px 17px; } .site-header { padding:18px 0; } }
+    @media(max-width:480px) { .layout { padding:0 12px; } .sidebar-grid { grid-template-columns:1fr; gap:0; } .top-chip { display:none; } .question-panel { padding:18px 14px; } .stem { font-size:15px; } .choice { padding:11px 10px; gap:9px; } .choice.correct,.choice.wrong { padding:10px 9px; } .choice-tag { display:none; } .nav button { padding:10px 12px; } }
+    @media(prefers-reduced-motion:reduce) { .progress-fill, .choice { transition:none; } }
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="layout header-inner">
+  <div class="identity"><div class="mark" aria-hidden="true">S1</div><div><h1>Step 1 Question Bank</h1><div class="subhead">Cardiology · Nephrology · Pulmonology</div></div></div>
+  <div class="top-chip">Original educational practice · Not official NBME content</div>
+</div></header>
+<main class="layout app">
+  <aside class="panel sidebar" aria-label="Question bank controls">
+    <h2>Your practice session</h2>
+    <div class="progress-info"><span>Answered questions</span><strong id="progress-text">0 / 45</strong></div>
+    <div class="progress-track" aria-label="Answered progress"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="stats"><div class="stat"><strong id="correct-count">0</strong><span>Correct</span></div><div class="stat"><strong id="accuracy">—</strong><span>Accuracy</span></div></div>
+    <div class="sidebar-grid">
+      <div class="field"><label class="label" for="topic-filter">System</label><select id="topic-filter"><option value="All">All systems</option><option value="Cardiology">Cardiology</option><option value="Nephrology">Nephrology</option><option value="Pulmonology">Pulmonology</option></select></div>
+      <div class="field"><label class="label" for="question-jump">Jump to question</label><select id="question-jump" aria-label="Jump to a numbered question"></select></div>
+    </div>
+    <p class="muted">Your selections are saved in this browser. An answer locks after your first choice, and the explanation appears immediately.</p>
+    <button type="button" class="reset" id="reset-progress">Reset all progress</button>
+  </aside>
+  <section class="panel question-panel" aria-label="Practice question">
+    <div id="question-content" aria-live="off"></div>
+    <div class="nav" aria-label="Question navigation"><button type="button" id="previous">← Previous</button><span class="nav-position" id="nav-position"></span><button type="button" id="next">Next →</button></div>
+  </section>
+</main>
+<div class="footer-note">Practice material derived from concepts in the provided Bootcamp review PDFs. Not affiliated with or endorsed by NBME, USMLE, or Bootcamp.</div>
+<noscript>This question bank requires JavaScript to run. Enable JavaScript in your browser and reload the page.</noscript>
+<script src="./questions.js"></script>
+<script>
+(function () {
+  'use strict';
+  const items = Array.isArray(window.STEP1_QUESTIONS) ? [...window.STEP1_QUESTIONS].sort((a,b)=>a.id-b.id) : [];
+  const KEY = 'step1-practice-answers-v1';
+  const CURRENT_KEY = 'step1-practice-current-v1';
+  const chars = ['A','B','C','D','E'];
+  const dom = {
+    content:document.getElementById('question-content'), topic:document.getElementById('topic-filter'),
+    jump:document.getElementById('question-jump'), progressText:document.getElementById('progress-text'),
+    progressFill:document.getElementById('progress-fill'), correctCount:document.getElementById('correct-count'),
+    accuracy:document.getElementById('accuracy'), previous:document.getElementById('previous'),
+    next:document.getElementById('next'), position:document.getElementById('nav-position'),
+    reset:document.getElementById('reset-progress')
+  };
+  let answers = {};
+  try { answers = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(_) { answers = {}; }
+  let currentId = items[0]?.id;
+  try { const saved=Number(localStorage.getItem(CURRENT_KEY)); if(items.some(q=>q.id===saved)) currentId=saved; } catch(_) {}
+  const make = (tag, className, text) => {
+    const e = document.createElement(tag);
+    if(className) e.className=className;
+    if(text!==undefined) e.textContent=text;
+    return e;
+  };
+  const currentList = () => items.filter(q=>dom.topic.value==='All' || q.topic===dom.topic.value);
+  function save(){ try { localStorage.setItem(KEY,JSON.stringify(answers)); localStorage.setItem(CURRENT_KEY,String(currentId)); } catch(_) {} }
+  function refreshStats() {
+    const done = items.filter(q=>Number.isInteger(answers[q.id]) && answers[q.id]>=0 && answers[q.id]<q.options.length);
+    const right = done.filter(q=>answers[q.id]===q.correct).length;
+    dom.progressText.textContent=`${done.length} / ${items.length}`;
+    dom.progressFill.style.width=items.length ? `${100*done.length/items.length}%`:'0%';
+    dom.correctCount.textContent=String(right);
+    dom.accuracy.textContent=done.length?`${Math.round(100*right/done.length)}%`:'—';
+  }
+  function refreshJump() {
+    const filtered=currentList();
+    dom.jump.replaceChildren();
+    for(const q of filtered) {
+      const o=document.createElement('option');
+      o.value=String(q.id);
+      o.textContent=`${q.id}. ${q.topic}${Number.isInteger(answers[q.id])?(answers[q.id]===q.correct?' ✓':' ✕'):''}`;
+      dom.jump.append(o);
+    }
+    if(filtered.length && !filtered.some(q=>q.id===currentId)) currentId=filtered[0].id;
+    if(filtered.length) dom.jump.value=String(currentId);
+  }
+  function choose(index){
+    const q=items.find(v=>v.id===currentId);
+    if(!q || Number.isInteger(answers[q.id])) return;
+    answers[q.id]=index; save(); render();
+    const feedback=document.getElementById('answer-feedback');
+    if(feedback) { feedback.focus({preventScroll:true}); feedback.scrollIntoView({behavior:'instant',block:'nearest'}); }
+  }
+  function render() {
+    refreshStats();refreshJump();
+    const filtered=currentList();
+    const pos=filtered.findIndex(q=>q.id===currentId);
+    const q=filtered[pos];
+    dom.previous.disabled=pos<=0;
+    dom.next.disabled=pos<0||pos>=filtered.length-1;
+    dom.position.textContent=pos<0?'No questions':`${pos+1} of ${filtered.length}`;
+    dom.content.replaceChildren();
+    if(!q){ dom.content.append(make('p','empty','No questions are available in this category.'));return; }
+    const answered=Number.isInteger(answers[q.id]);
+    const selected=answers[q.id];
+    const heading=make('div','q-topline');
+    heading.append(make('span','q-number',`QUESTION ${q.id} OF ${items.length}`),make('span','badge',q.topic));
+    dom.content.append(heading,make('p','stem',q.stem));
+    if(Array.isArray(q.labs)&&q.labs.length){
+      const wrapper=make('div','lab-wrap');
+      const table=make('table','labs');
+      const thead=document.createElement('thead'); const hrow=document.createElement('tr');
+      ['Test','Patient value','Reference range'].forEach(t=>hrow.append(make('th','',t)));
+      thead.append(hrow);table.append(thead);
+      const tbody=document.createElement('tbody');
+      for(const lab of q.labs) { const tr=document.createElement('tr');lab.forEach(value=>tr.append(make('td','',value)));tbody.append(tr); }
+      table.append(tbody);wrapper.append(table);dom.content.append(wrapper);
+    }
+    dom.content.append(make('p','prompt',q.prompt));
+    const opts=make('div','options');
+    q.options.forEach((value,i)=>{
+      const b=make('button','choice');b.type='button';b.disabled=answered;
+      if(answered && i===q.correct) b.classList.add('correct');
+      if(answered && i===selected && i!==q.correct) b.classList.add('wrong');
+      b.setAttribute('aria-label',`Answer ${chars[i]}: ${value}`);
+      b.append(make('span','letter',chars[i]),make('span','choice-text',value));
+      if(answered && i===q.correct) b.append(make('span','choice-tag','✓ Correct answer'));
+      else if(answered && i===selected) b.append(make('span','choice-tag','✕ Your answer'));
+      b.addEventListener('click',()=>choose(i));opts.append(b);
+    });
+    dom.content.append(opts);
+    if(answered){
+      const right=selected===q.correct;
+      const fb=make('section',`feedback ${right?'good':'bad'}`);fb.id='answer-feedback';fb.tabIndex=-1;
+      fb.setAttribute('aria-live','polite');
+      fb.append(make('h2','',right?'✓ Correct!':'✕ Incorrect'));
+      fb.append(make('p','',`Correct answer: ${chars[q.correct]}. ${q.options[q.correct]}`));
+      if(!right) fb.append(make('p','',`You selected: ${chars[selected]}. ${q.options[selected]}`));
+      const explanations=make('div','explanations');explanations.append(make('h3','','Explanation of every answer choice'));
+      q.options.forEach((option,i)=>{
+        const line=make('div','explain-row');
+        if(i===q.correct)line.classList.add('is-correct');
+        if(i===selected&&i!==q.correct)line.classList.add('is-chosen-wrong');
+        line.append(make('span','explain-key',`${chars[i]}. ${i===q.correct?'✓':i===selected?'✕':''}`));
+        const para=make('p','',`${option} — ${q.explanations[i]}`);line.append(para);explanations.append(line);
+      });
+      fb.append(explanations);
+      if(q.takeaway) fb.append(make('div','takeaway',`High-yield takeaway: ${q.takeaway}`));
+      dom.content.append(fb);
+    } else dom.content.append(make('p','hint','Select one answer to receive immediate feedback and explanations for all five choices.'));
+  }
+  function navigate(direction){
+    const list=currentList();const i=list.findIndex(q=>q.id===currentId);
+    if(i+direction<0||i+direction>=list.length)return;
+    currentId=list[i+direction].id;save();render();window.scrollTo({top:0,behavior:'instant'});
+  }
+  dom.previous.addEventListener('click',()=>navigate(-1));dom.next.addEventListener('click',()=>navigate(1));
+  dom.topic.addEventListener('change',()=>{const list=currentList();currentId=list[0]?.id;save();render();});
+  dom.jump.addEventListener('change',()=>{currentId=Number(dom.jump.value);save();render();window.scrollTo({top:0,behavior:'instant'});});
+  dom.reset.addEventListener('click',()=>{if(confirm('Clear your saved answers for all questions? This cannot be undone.')){answers={};save();render();}});
+  document.addEventListener('keydown',e=>{
+    if(e.altKey||e.ctrlKey||e.metaKey||['SELECT','INPUT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
+    if(/^[1-5]$/.test(e.key)){choose(Number(e.key)-1);}
+    else if(e.key==='ArrowLeft')navigate(-1);else if(e.key==='ArrowRight')navigate(1);
+  });
+  // Validate content early so additions to questions.js cannot silently create broken quiz items.
+  for(const q of items){
+    if(!Number.isInteger(q.id)||!Array.isArray(q.options)||q.options.length!==5||!Array.isArray(q.explanations)||q.explanations.length!==5||q.correct<0||q.correct>4) {
+      console.error('Invalid question data:',q);dom.content.append(make('p','empty','Question data needs correction. Check the browser console.'));return;
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
